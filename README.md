@@ -1,5 +1,7 @@
 # sqlswitch
 
+[![Build Status](https://travis-ci.org/17media/go-sql-switch.svg?branch=master)](https://travis-ci.org/17media/go-sql-switch) [![Coverage Status](https://coveralls.io/repos/github/17media/go-sql-switch/badge.svg?branch=master)](https://coveralls.io/github/17media/go-sql-switch?branch=master)
+
 A specific purpose golang `database/sql` driver wrapper that helps [goapi](https://github.com/17media/api) switch between different MySQL sources while minimizing down time. It's **NOT** for general use.
 
 ### Usage
