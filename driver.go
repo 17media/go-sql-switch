@@ -4,6 +4,7 @@ import (
 	"database/sql/driver"
 	"fmt"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -39,9 +40,10 @@ func New(open OpenFunc) Driver {
 }
 
 type switchDriver struct {
-	open OpenFunc
-	c    Config
-	dsn  string
+	open  OpenFunc
+	c     Config
+	dsn   string
+	mutex sync.Mutex
 }
 
 func (sd *switchDriver) Open(dsn string) (driver.Conn, error) {
@@ -92,7 +94,10 @@ func (sd *switchDriver) Open(dsn string) (driver.Conn, error) {
 }
 
 func (sd *switchDriver) ApplyConfig(c Config) {
+	// Use mutex to protect config integrity
+	sd.mutex.Lock()
 	sd.c = c
+	sd.mutex.Unlock()
 }
 
 func (sd *switchDriver) GetDSN() string {
