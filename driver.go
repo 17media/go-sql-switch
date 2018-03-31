@@ -43,7 +43,7 @@ type switchDriver struct {
 	open  OpenFunc
 	c     Config
 	dsn   string
-	mutex sync.Mutex
+	mutex sync.RWMutex
 }
 
 func (sd *switchDriver) Open(dsn string) (driver.Conn, error) {
@@ -61,6 +61,9 @@ func (sd *switchDriver) Open(dsn string) (driver.Conn, error) {
 		dstDsn = dsns[1]
 		bakDsn = dsns[2]
 	}
+
+	sd.mutex.RLock()
+	defer sd.mutex.RUnlock()
 
 	if sd.c.Target == "src" || sd.c.Target == "" {
 		sd.dsn = srcDsn
